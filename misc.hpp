@@ -19,6 +19,7 @@
 
 #include "filesystem.hpp"
 
+#include <locale>
 #include <optional>
 #include <vector>
 
@@ -88,6 +89,25 @@ first_parent(std::filesystem::path path, const std::filesystem::path& child)
     else
       return std::nullopt;
   }
+}
+
+/**
+ * @brief Uppercases the root name of `path`.
+ *
+ * @remarks Useful on Windows.
+ */
+inline std::filesystem::path to_upper_root_name(const std::filesystem::path& path, const std::locale& loc = {})
+{
+  if (!path.has_root_name())
+    return path;
+
+  auto result = path.root_name();
+  auto root_name = result.wstring();
+  const auto& facet = std::use_facet<std::ctype<wchar_t>>(loc);
+  facet.toupper(root_name.data(), root_name.data() + root_name.size());
+  result = std::filesystem::path{root_name};
+  result += path.root_directory();
+  return result += path.relative_path();
 }
 
 } // namespace dmitigr::fsx
