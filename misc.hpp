@@ -96,7 +96,7 @@ first_parent(std::filesystem::path path, const std::filesystem::path& child)
  *
  * @remarks Useful on Windows.
  */
-inline std::filesystem::path to_upper_root_name(const std::filesystem::path& path,
+inline std::filesystem::path to_uppercase_root_name(const std::filesystem::path& path,
   const std::locale& loc = {})
 {
   if (!path.has_root_name())
